@@ -1,0 +1,28 @@
+screen("Title 123", 1600, 800, 130);
+
+player(Level_1, 20, 40);
+
+world(Level_1, 100, 50){
+    block(0,0,300, 200);
+    block(350,50,400, 200);
+    finish(700, 130, 40, 80, Level_2);
+}
+
+world(Level_2, 100, 50){
+    block(0,0,300, 200);
+    block(350,50,400, 200);
+    checkpoint(700,80,20,20);
+    block(850,20,400, 200);
+    finish(1200, 100, 40, 80, Level_3);
+}
+
+world(Level_3, 50, 40){
+    block(0,0,500,200);
+    spike(300,40,20);
+    checkpoint(400,50,20,20);
+    platform(100, 100, 100, 5);
+    platform(200, 200, 100, 5);
+    platform(300, 300, 100, 5);
+    block(500,30,300,200);
+    finish(700, 110, 40, 80, Level_1); 
+}

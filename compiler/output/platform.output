@@ -1,0 +1,903 @@
+Grammar
+
+    0 $accept: program $end
+
+    1 program: screen_statement player_statement universe_statement
+    2        | player_statement universe_statement
+    3        | error
+
+    4 screen_statement: SCREEN LPAREN STRING COMMA NUMBER COMMA NUMBER COMMA NUMBER RPAREN SEMI
+    5                 | SCREEN LPAREN STRING COMMA NUMBER RPAREN SEMI
+    6                 | SCREEN LPAREN STRING RPAREN SEMI
+    7                 | SCREEN error SEMI
+
+    8 player_statement: PLAYER LPAREN IDENT COMMA NUMBER COMMA NUMBER RPAREN SEMI
+    9                 | PLAYER error SEMI
+
+   10 universe_statement: universe_statement world_statement
+   11                   | world_statement
+
+   12 world_statement: WORLD LPAREN IDENT COMMA NUMBER COMMA NUMBER RPAREN LBRACE world_content RBRACE
+   13                | WORLD LPAREN IDENT COMMA NUMBER COMMA NUMBER RPAREN LBRACE error RBRACE
+   14                | WORLD error LBRACE
+
+   15 world_content: world_content gameobject
+   16              | gameobject
+
+   17 gameobject: type_statement LPAREN rect_statement RPAREN SEMI
+   18           | type_statement LPAREN rect_statement COMMA IDENT RPAREN SEMI
+   19           | SPIKE LPAREN sqr_statement RPAREN SEMI
+   20           | type_statement LPAREN error RPAREN SEMI
+   21           | error LPAREN rect_statement RPAREN SEMI
+   22           | error LPAREN rect_statement COMMA IDENT RPAREN SEMI
+   23           | SPIKE error SEMI
+   24           | error SEMI
+
+   25 type_statement: CHECKPOINT
+   26               | BLOCK
+   27               | PLATFORM
+   28               | FINISH
+
+   29 rect_statement: NUMBER COMMA NUMBER COMMA NUMBER COMMA NUMBER
+
+   30 sqr_statement: NUMBER COMMA NUMBER COMMA NUMBER
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    error (256) 3 7 9 13 14 20 21 22 23 24
+    SCREEN (258) 4 5 6 7
+    PLAYER (259) 8 9
+    WORLD (260) 12 13 14
+    CHECKPOINT (261) 25
+    BLOCK (262) 26
+    PLATFORM (263) 27
+    FINISH (264) 28
+    SPIKE (265) 19 23
+    LPAREN (266) 4 5 6 8 12 13 17 18 19 20 21 22
+    RPAREN (267) 4 5 6 8 12 13 17 18 19 20 21 22
+    LBRACE (268) 12 13 14
+    RBRACE (269) 12 13
+    COMMA (270) 4 5 8 12 13 18 22 29 30
+    SEMI (271) 4 5 6 7 8 9 17 18 19 20 21 22 23 24
+    STRING <str> (272) 4 5 6
+    IDENT <str> (273) 8 12 13 18 22
+    NUMBER <num> (274) 4 5 8 12 13 29 30
+
+
+Nonterminals, with rules where they appear
+
+    $accept (20)
+        on left: 0
+    program <node> (21)
+        on left: 1 2 3
+        on right: 0
+    screen_statement <node> (22)
+        on left: 4 5 6 7
+        on right: 1
+    player_statement <node> (23)
+        on left: 8 9
+        on right: 1 2
+    universe_statement <node> (24)
+        on left: 10 11
+        on right: 1 2 10
+    world_statement <node> (25)
+        on left: 12 13 14
+        on right: 10 11
+    world_content <node> (26)
+        on left: 15 16
+        on right: 12 15
+    gameobject <node> (27)
+        on left: 17 18 19 20 21 22 23 24
+        on right: 15 16
+    type_statement <type> (28)
+        on left: 25 26 27 28
+        on right: 17 18 20
+    rect_statement <node> (29)
+        on left: 29
+        on right: 17 18 21 22
+    sqr_statement <node> (30)
+        on left: 30
+        on right: 19
+
+
+State 0
+
+    0 $accept: • program $end
+
+    error   shift, and go to state 1
+    SCREEN  shift, and go to state 2
+    PLAYER  shift, and go to state 3
+
+    program           go to state 4
+    screen_statement  go to state 5
+    player_statement  go to state 6
+
+
+State 1
+
+    3 program: error •
+
+    $default  reduce using rule 3 (program)
+
+
+State 2
+
+    4 screen_statement: SCREEN • LPAREN STRING COMMA NUMBER COMMA NUMBER COMMA NUMBER RPAREN SEMI
+    5                 | SCREEN • LPAREN STRING COMMA NUMBER RPAREN SEMI
+    6                 | SCREEN • LPAREN STRING RPAREN SEMI
+    7                 | SCREEN • error SEMI
+
+    error   shift, and go to state 7
+    LPAREN  shift, and go to state 8
+
+
+State 3
+
+    8 player_statement: PLAYER • LPAREN IDENT COMMA NUMBER COMMA NUMBER RPAREN SEMI
+    9                 | PLAYER • error SEMI
+
+    error   shift, and go to state 9
+    LPAREN  shift, and go to state 10
+
+
+State 4
+
+    0 $accept: program • $end
+
+    $end  shift, and go to state 11
+
+
+State 5
+
+    1 program: screen_statement • player_statement universe_statement
+
+    PLAYER  shift, and go to state 3
+
+    player_statement  go to state 12
+
+
+State 6
+
+    2 program: player_statement • universe_statement
+
+    WORLD  shift, and go to state 13
+
+    universe_statement  go to state 14
+    world_statement     go to state 15
+
+
+State 7
+
+    7 screen_statement: SCREEN error • SEMI
+
+    SEMI  shift, and go to state 16
+
+
+State 8
+
+    4 screen_statement: SCREEN LPAREN • STRING COMMA NUMBER COMMA NUMBER COMMA NUMBER RPAREN SEMI
+    5                 | SCREEN LPAREN • STRING COMMA NUMBER RPAREN SEMI
+    6                 | SCREEN LPAREN • STRING RPAREN SEMI
+
+    STRING  shift, and go to state 17
+
+
+State 9
+
+    9 player_statement: PLAYER error • SEMI
+
+    SEMI  shift, and go to state 18
+
+
+State 10
+
+    8 player_statement: PLAYER LPAREN • IDENT COMMA NUMBER COMMA NUMBER RPAREN SEMI
+
+    IDENT  shift, and go to state 19
+
+
+State 11
+
+    0 $accept: program $end •
+
+    $default  accept
+
+
+State 12
+
+    1 program: screen_statement player_statement • universe_statement
+
+    WORLD  shift, and go to state 13
+
+    universe_statement  go to state 20
+    world_statement     go to state 15
+
+
+State 13
+
+   12 world_statement: WORLD • LPAREN IDENT COMMA NUMBER COMMA NUMBER RPAREN LBRACE world_content RBRACE
+   13                | WORLD • LPAREN IDENT COMMA NUMBER COMMA NUMBER RPAREN LBRACE error RBRACE
+   14                | WORLD • error LBRACE
+
+    error   shift, and go to state 21
+    LPAREN  shift, and go to state 22
+
+
+State 14
+
+    2 program: player_statement universe_statement •
+   10 universe_statement: universe_statement • world_statement
+
+    WORLD  shift, and go to state 13
+
+    $default  reduce using rule 2 (program)
+
+    world_statement  go to state 23
+
+
+State 15
+
+   11 universe_statement: world_statement •
+
+    $default  reduce using rule 11 (universe_statement)
+
+
+State 16
+
+    7 screen_statement: SCREEN error SEMI •
+
+    $default  reduce using rule 7 (screen_statement)
+
+
+State 17
+
+    4 screen_statement: SCREEN LPAREN STRING • COMMA NUMBER COMMA NUMBER COMMA NUMBER RPAREN SEMI
+    5                 | SCREEN LPAREN STRING • COMMA NUMBER RPAREN SEMI
+    6                 | SCREEN LPAREN STRING • RPAREN SEMI
+
+    RPAREN  shift, and go to state 24
+    COMMA   shift, and go to state 25
+
+
+State 18
+
+    9 player_statement: PLAYER error SEMI •
+
+    $default  reduce using rule 9 (player_statement)
+
+
+State 19
+
+    8 player_statement: PLAYER LPAREN IDENT • COMMA NUMBER COMMA NUMBER RPAREN SEMI
+
+    COMMA  shift, and go to state 26
+
+
+State 20
+
+    1 program: screen_statement player_statement universe_statement •
+   10 universe_statement: universe_statement • world_statement
+
+    WORLD  shift, and go to state 13
+
+    $default  reduce using rule 1 (program)
+
+    world_statement  go to state 23
+
+
+State 21
+
+   14 world_statement: WORLD error • LBRACE
+
+    LBRACE  shift, and go to state 27
+
+
+State 22
+
+   12 world_statement: WORLD LPAREN • IDENT COMMA NUMBER COMMA NUMBER RPAREN LBRACE world_content RBRACE
+   13                | WORLD LPAREN • IDENT COMMA NUMBER COMMA NUMBER RPAREN LBRACE error RBRACE
+
+    IDENT  shift, and go to state 28
+
+
+State 23
+
+   10 universe_statement: universe_statement world_statement •
+
+    $default  reduce using rule 10 (universe_statement)
+
+
+State 24
+
+    6 screen_statement: SCREEN LPAREN STRING RPAREN • SEMI
+
+    SEMI  shift, and go to state 29
+
+
+State 25
+
+    4 screen_statement: SCREEN LPAREN STRING COMMA • NUMBER COMMA NUMBER COMMA NUMBER RPAREN SEMI
+    5                 | SCREEN LPAREN STRING COMMA • NUMBER RPAREN SEMI
+
+    NUMBER  shift, and go to state 30
+
+
+State 26
+
+    8 player_statement: PLAYER LPAREN IDENT COMMA • NUMBER COMMA NUMBER RPAREN SEMI
+
+    NUMBER  shift, and go to state 31
+
+
+State 27
+
+   14 world_statement: WORLD error LBRACE •
+
+    $default  reduce using rule 14 (world_statement)
+
+
+State 28
+
+   12 world_statement: WORLD LPAREN IDENT • COMMA NUMBER COMMA NUMBER RPAREN LBRACE world_content RBRACE
+   13                | WORLD LPAREN IDENT • COMMA NUMBER COMMA NUMBER RPAREN LBRACE error RBRACE
+
+    COMMA  shift, and go to state 32
+
+
+State 29
+
+    6 screen_statement: SCREEN LPAREN STRING RPAREN SEMI •
+
+    $default  reduce using rule 6 (screen_statement)
+
+
+State 30
+
+    4 screen_statement: SCREEN LPAREN STRING COMMA NUMBER • COMMA NUMBER COMMA NUMBER RPAREN SEMI
+    5                 | SCREEN LPAREN STRING COMMA NUMBER • RPAREN SEMI
+
+    RPAREN  shift, and go to state 33
+    COMMA   shift, and go to state 34
+
+
+State 31
+
+    8 player_statement: PLAYER LPAREN IDENT COMMA NUMBER • COMMA NUMBER RPAREN SEMI
+
+    COMMA  shift, and go to state 35
+
+
+State 32
+
+   12 world_statement: WORLD LPAREN IDENT COMMA • NUMBER COMMA NUMBER RPAREN LBRACE world_content RBRACE
+   13                | WORLD LPAREN IDENT COMMA • NUMBER COMMA NUMBER RPAREN LBRACE error RBRACE
+
+    NUMBER  shift, and go to state 36
+
+
+State 33
+
+    5 screen_statement: SCREEN LPAREN STRING COMMA NUMBER RPAREN • SEMI
+
+    SEMI  shift, and go to state 37
+
+
+State 34
+
+    4 screen_statement: SCREEN LPAREN STRING COMMA NUMBER COMMA • NUMBER COMMA NUMBER RPAREN SEMI
+
+    NUMBER  shift, and go to state 38
+
+
+State 35
+
+    8 player_statement: PLAYER LPAREN IDENT COMMA NUMBER COMMA • NUMBER RPAREN SEMI
+
+    NUMBER  shift, and go to state 39
+
+
+State 36
+
+   12 world_statement: WORLD LPAREN IDENT COMMA NUMBER • COMMA NUMBER RPAREN LBRACE world_content RBRACE
+   13                | WORLD LPAREN IDENT COMMA NUMBER • COMMA NUMBER RPAREN LBRACE error RBRACE
+
+    COMMA  shift, and go to state 40
+
+
+State 37
+
+    5 screen_statement: SCREEN LPAREN STRING COMMA NUMBER RPAREN SEMI •
+
+    $default  reduce using rule 5 (screen_statement)
+
+
+State 38
+
+    4 screen_statement: SCREEN LPAREN STRING COMMA NUMBER COMMA NUMBER • COMMA NUMBER RPAREN SEMI
+
+    COMMA  shift, and go to state 41
+
+
+State 39
+
+    8 player_statement: PLAYER LPAREN IDENT COMMA NUMBER COMMA NUMBER • RPAREN SEMI
+
+    RPAREN  shift, and go to state 42
+
+
+State 40
+
+   12 world_statement: WORLD LPAREN IDENT COMMA NUMBER COMMA • NUMBER RPAREN LBRACE world_content RBRACE
+   13                | WORLD LPAREN IDENT COMMA NUMBER COMMA • NUMBER RPAREN LBRACE error RBRACE
+
+    NUMBER  shift, and go to state 43
+
+
+State 41
+
+    4 screen_statement: SCREEN LPAREN STRING COMMA NUMBER COMMA NUMBER COMMA • NUMBER RPAREN SEMI
+
+    NUMBER  shift, and go to state 44
+
+
+State 42
+
+    8 player_statement: PLAYER LPAREN IDENT COMMA NUMBER COMMA NUMBER RPAREN • SEMI
+
+    SEMI  shift, and go to state 45
+
+
+State 43
+
+   12 world_statement: WORLD LPAREN IDENT COMMA NUMBER COMMA NUMBER • RPAREN LBRACE world_content RBRACE
+   13                | WORLD LPAREN IDENT COMMA NUMBER COMMA NUMBER • RPAREN LBRACE error RBRACE
+
+    RPAREN  shift, and go to state 46
+
+
+State 44
+
+    4 screen_statement: SCREEN LPAREN STRING COMMA NUMBER COMMA NUMBER COMMA NUMBER • RPAREN SEMI
+
+    RPAREN  shift, and go to state 47
+
+
+State 45
+
+    8 player_statement: PLAYER LPAREN IDENT COMMA NUMBER COMMA NUMBER RPAREN SEMI •
+
+    $default  reduce using rule 8 (player_statement)
+
+
+State 46
+
+   12 world_statement: WORLD LPAREN IDENT COMMA NUMBER COMMA NUMBER RPAREN • LBRACE world_content RBRACE
+   13                | WORLD LPAREN IDENT COMMA NUMBER COMMA NUMBER RPAREN • LBRACE error RBRACE
+
+    LBRACE  shift, and go to state 48
+
+
+State 47
+
+    4 screen_statement: SCREEN LPAREN STRING COMMA NUMBER COMMA NUMBER COMMA NUMBER RPAREN • SEMI
+
+    SEMI  shift, and go to state 49
+
+
+State 48
+
+   12 world_statement: WORLD LPAREN IDENT COMMA NUMBER COMMA NUMBER RPAREN LBRACE • world_content RBRACE
+   13                | WORLD LPAREN IDENT COMMA NUMBER COMMA NUMBER RPAREN LBRACE • error RBRACE
+
+    error       shift, and go to state 50
+    CHECKPOINT  shift, and go to state 51
+    BLOCK       shift, and go to state 52
+    PLATFORM    shift, and go to state 53
+    FINISH      shift, and go to state 54
+    SPIKE       shift, and go to state 55
+
+    world_content   go to state 56
+    gameobject      go to state 57
+    type_statement  go to state 58
+
+
+State 49
+
+    4 screen_statement: SCREEN LPAREN STRING COMMA NUMBER COMMA NUMBER COMMA NUMBER RPAREN SEMI •
+
+    $default  reduce using rule 4 (screen_statement)
+
+
+State 50
+
+   13 world_statement: WORLD LPAREN IDENT COMMA NUMBER COMMA NUMBER RPAREN LBRACE error • RBRACE
+   21 gameobject: error • LPAREN rect_statement RPAREN SEMI
+   22           | error • LPAREN rect_statement COMMA IDENT RPAREN SEMI
+   24           | error • SEMI
+
+    LPAREN  shift, and go to state 59
+    RBRACE  shift, and go to state 60
+    SEMI    shift, and go to state 61
+
+
+State 51
+
+   25 type_statement: CHECKPOINT •
+
+    $default  reduce using rule 25 (type_statement)
+
+
+State 52
+
+   26 type_statement: BLOCK •
+
+    $default  reduce using rule 26 (type_statement)
+
+
+State 53
+
+   27 type_statement: PLATFORM •
+
+    $default  reduce using rule 27 (type_statement)
+
+
+State 54
+
+   28 type_statement: FINISH •
+
+    $default  reduce using rule 28 (type_statement)
+
+
+State 55
+
+   19 gameobject: SPIKE • LPAREN sqr_statement RPAREN SEMI
+   23           | SPIKE • error SEMI
+
+    error   shift, and go to state 62
+    LPAREN  shift, and go to state 63
+
+
+State 56
+
+   12 world_statement: WORLD LPAREN IDENT COMMA NUMBER COMMA NUMBER RPAREN LBRACE world_content • RBRACE
+   15 world_content: world_content • gameobject
+
+    error       shift, and go to state 64
+    CHECKPOINT  shift, and go to state 51
+    BLOCK       shift, and go to state 52
+    PLATFORM    shift, and go to state 53
+    FINISH      shift, and go to state 54
+    SPIKE       shift, and go to state 55
+    RBRACE      shift, and go to state 65
+
+    gameobject      go to state 66
+    type_statement  go to state 58
+
+
+State 57
+
+   16 world_content: gameobject •
+
+    $default  reduce using rule 16 (world_content)
+
+
+State 58
+
+   17 gameobject: type_statement • LPAREN rect_statement RPAREN SEMI
+   18           | type_statement • LPAREN rect_statement COMMA IDENT RPAREN SEMI
+   20           | type_statement • LPAREN error RPAREN SEMI
+
+    LPAREN  shift, and go to state 67
+
+
+State 59
+
+   21 gameobject: error LPAREN • rect_statement RPAREN SEMI
+   22           | error LPAREN • rect_statement COMMA IDENT RPAREN SEMI
+
+    NUMBER  shift, and go to state 68
+
+    rect_statement  go to state 69
+
+
+State 60
+
+   13 world_statement: WORLD LPAREN IDENT COMMA NUMBER COMMA NUMBER RPAREN LBRACE error RBRACE •
+
+    $default  reduce using rule 13 (world_statement)
+
+
+State 61
+
+   24 gameobject: error SEMI •
+
+    $default  reduce using rule 24 (gameobject)
+
+
+State 62
+
+   23 gameobject: SPIKE error • SEMI
+
+    SEMI  shift, and go to state 70
+
+
+State 63
+
+   19 gameobject: SPIKE LPAREN • sqr_statement RPAREN SEMI
+
+    NUMBER  shift, and go to state 71
+
+    sqr_statement  go to state 72
+
+
+State 64
+
+   21 gameobject: error • LPAREN rect_statement RPAREN SEMI
+   22           | error • LPAREN rect_statement COMMA IDENT RPAREN SEMI
+   24           | error • SEMI
+
+    LPAREN  shift, and go to state 59
+    SEMI    shift, and go to state 61
+
+
+State 65
+
+   12 world_statement: WORLD LPAREN IDENT COMMA NUMBER COMMA NUMBER RPAREN LBRACE world_content RBRACE •
+
+    $default  reduce using rule 12 (world_statement)
+
+
+State 66
+
+   15 world_content: world_content gameobject •
+
+    $default  reduce using rule 15 (world_content)
+
+
+State 67
+
+   17 gameobject: type_statement LPAREN • rect_statement RPAREN SEMI
+   18           | type_statement LPAREN • rect_statement COMMA IDENT RPAREN SEMI
+   20           | type_statement LPAREN • error RPAREN SEMI
+
+    error   shift, and go to state 73
+    NUMBER  shift, and go to state 68
+
+    rect_statement  go to state 74
+
+
+State 68
+
+   29 rect_statement: NUMBER • COMMA NUMBER COMMA NUMBER COMMA NUMBER
+
+    COMMA  shift, and go to state 75
+
+
+State 69
+
+   21 gameobject: error LPAREN rect_statement • RPAREN SEMI
+   22           | error LPAREN rect_statement • COMMA IDENT RPAREN SEMI
+
+    RPAREN  shift, and go to state 76
+    COMMA   shift, and go to state 77
+
+
+State 70
+
+   23 gameobject: SPIKE error SEMI •
+
+    $default  reduce using rule 23 (gameobject)
+
+
+State 71
+
+   30 sqr_statement: NUMBER • COMMA NUMBER COMMA NUMBER
+
+    COMMA  shift, and go to state 78
+
+
+State 72
+
+   19 gameobject: SPIKE LPAREN sqr_statement • RPAREN SEMI
+
+    RPAREN  shift, and go to state 79
+
+
+State 73
+
+   20 gameobject: type_statement LPAREN error • RPAREN SEMI
+
+    RPAREN  shift, and go to state 80
+
+
+State 74
+
+   17 gameobject: type_statement LPAREN rect_statement • RPAREN SEMI
+   18           | type_statement LPAREN rect_statement • COMMA IDENT RPAREN SEMI
+
+    RPAREN  shift, and go to state 81
+    COMMA   shift, and go to state 82
+
+
+State 75
+
+   29 rect_statement: NUMBER COMMA • NUMBER COMMA NUMBER COMMA NUMBER
+
+    NUMBER  shift, and go to state 83
+
+
+State 76
+
+   21 gameobject: error LPAREN rect_statement RPAREN • SEMI
+
+    SEMI  shift, and go to state 84
+
+
+State 77
+
+   22 gameobject: error LPAREN rect_statement COMMA • IDENT RPAREN SEMI
+
+    IDENT  shift, and go to state 85
+
+
+State 78
+
+   30 sqr_statement: NUMBER COMMA • NUMBER COMMA NUMBER
+
+    NUMBER  shift, and go to state 86
+
+
+State 79
+
+   19 gameobject: SPIKE LPAREN sqr_statement RPAREN • SEMI
+
+    SEMI  shift, and go to state 87
+
+
+State 80
+
+   20 gameobject: type_statement LPAREN error RPAREN • SEMI
+
+    SEMI  shift, and go to state 88
+
+
+State 81
+
+   17 gameobject: type_statement LPAREN rect_statement RPAREN • SEMI
+
+    SEMI  shift, and go to state 89
+
+
+State 82
+
+   18 gameobject: type_statement LPAREN rect_statement COMMA • IDENT RPAREN SEMI
+
+    IDENT  shift, and go to state 90
+
+
+State 83
+
+   29 rect_statement: NUMBER COMMA NUMBER • COMMA NUMBER COMMA NUMBER
+
+    COMMA  shift, and go to state 91
+
+
+State 84
+
+   21 gameobject: error LPAREN rect_statement RPAREN SEMI •
+
+    $default  reduce using rule 21 (gameobject)
+
+
+State 85
+
+   22 gameobject: error LPAREN rect_statement COMMA IDENT • RPAREN SEMI
+
+    RPAREN  shift, and go to state 92
+
+
+State 86
+
+   30 sqr_statement: NUMBER COMMA NUMBER • COMMA NUMBER
+
+    COMMA  shift, and go to state 93
+
+
+State 87
+
+   19 gameobject: SPIKE LPAREN sqr_statement RPAREN SEMI •
+
+    $default  reduce using rule 19 (gameobject)
+
+
+State 88
+
+   20 gameobject: type_statement LPAREN error RPAREN SEMI •
+
+    $default  reduce using rule 20 (gameobject)
+
+
+State 89
+
+   17 gameobject: type_statement LPAREN rect_statement RPAREN SEMI •
+
+    $default  reduce using rule 17 (gameobject)
+
+
+State 90
+
+   18 gameobject: type_statement LPAREN rect_statement COMMA IDENT • RPAREN SEMI
+
+    RPAREN  shift, and go to state 94
+
+
+State 91
+
+   29 rect_statement: NUMBER COMMA NUMBER COMMA • NUMBER COMMA NUMBER
+
+    NUMBER  shift, and go to state 95
+
+
+State 92
+
+   22 gameobject: error LPAREN rect_statement COMMA IDENT RPAREN • SEMI
+
+    SEMI  shift, and go to state 96
+
+
+State 93
+
+   30 sqr_statement: NUMBER COMMA NUMBER COMMA • NUMBER
+
+    NUMBER  shift, and go to state 97
+
+
+State 94
+
+   18 gameobject: type_statement LPAREN rect_statement COMMA IDENT RPAREN • SEMI
+
+    SEMI  shift, and go to state 98
+
+
+State 95
+
+   29 rect_statement: NUMBER COMMA NUMBER COMMA NUMBER • COMMA NUMBER
+
+    COMMA  shift, and go to state 99
+
+
+State 96
+
+   22 gameobject: error LPAREN rect_statement COMMA IDENT RPAREN SEMI •
+
+    $default  reduce using rule 22 (gameobject)
+
+
+State 97
+
+   30 sqr_statement: NUMBER COMMA NUMBER COMMA NUMBER •
+
+    $default  reduce using rule 30 (sqr_statement)
+
+
+State 98
+
+   18 gameobject: type_statement LPAREN rect_statement COMMA IDENT RPAREN SEMI •
+
+    $default  reduce using rule 18 (gameobject)
+
+
+State 99
+
+   29 rect_statement: NUMBER COMMA NUMBER COMMA NUMBER COMMA • NUMBER
+
+    NUMBER  shift, and go to state 100
+
+
+State 100
+
+   29 rect_statement: NUMBER COMMA NUMBER COMMA NUMBER COMMA NUMBER •
+
+    $default  reduce using rule 29 (rect_statement)

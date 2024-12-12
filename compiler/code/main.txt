@@ -1,0 +1,13 @@
+#include "platform.h"
+
+extern int run(GameSettings settings);
+
+int main(void)
+{
+#worlds#
+#gameobjects#
+    return run((GameSettings) {
+        #screen#,
+        #player#
+    });
+}
