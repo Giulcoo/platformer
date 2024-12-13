@@ -10,33 +10,35 @@ Each program consists of a screen setting, player and one or more worlds. The fo
 ```
 screen(1600, 800, 100);
 
-player("Start", 20, 40);
+player(Start, 20, 40);
 
-world("Start", 50, 40){
+world(Start, 50, 40){
     block(0,0,500,200);
     checkpoint(400,50,20,20);
     platform(100, 200, 100, 5);
     block(500,30,300,200);
-    finish(700, 110, 40, 80, "Level 2"); 
+    finish(700, 110, 40, 80, Level_2); 
 }
 
-world("Level 2", 100, 50){
+world(Level_2, 100, 50){
     block(0,0,300, 200);
     block(350,50,400, 200);
-    finish(700, 130, 40, 80, "Start");
+    finish(700, 130, 40, 80, Start);
 }
 ```
 #### Screen
 The screen object sets the width and height of the screen of the game and the zoom factor. The zoom is in percentage. So under 100 the camera zooms out and above 100 it zooms in.\
 ```screen(String: title, Number: width, Number: height, Number: zoom);```
+Numbers have to be always positive integral numbers.
 
 #### Player
-The player is the character that the user can move around. It is defined like the following code shows.
-```player(String: initial world, Number: width, Number: height);```
+The player is the character that the user can move around. It is defined like the following code shows.\
+```player(ID: initial world, Number: width, Number: height);```\
+ID's start with a letter and the can be followed by other letters, numbers or underscore.
 
 #### World
 Each world has the following attributes and inside the ```{ ... }``` section the game objects of a world is defined. Each world equals to one level of the game.\
-```world(String: Name, Number: Player spawn x, Number: player spawn y){ ... }```
+```world(ID: Name, Number: Player spawn x, Number: player spawn y){ ... }```
 
 #### Game objects
 The following code shows how to define game objects inside worlds. A game object can be a ```block```, a ```platform```, a ```spike``` or a ```checkpoint```.\
@@ -58,14 +60,12 @@ Developers can write their programs in a txt-file. The following steps show how 
 First clone the repository and then install following C libraries
 - Bison 
 - Flex
-- Raylib (install libraries: raylib raylib-devel)
-
 Then for setup run the command ```make```. 
 
 #### Compilation
 If for example you write your Platformer code in the file ```platform_game.txt```, the command\
-```make compile INPUT=platform_game```\
-can be used, to compile the code.
+```make compile INPUT=platform_game VERBOSE=1```\
+can be used, to compile the code. The ```VERBOSE``` option can be set to get more logs when compiling. If no input or verbose value is set, the default input file is the file "input.txt" and verbose is set to true.
 
 #### Run the program
 If the compilation of the program was successful run ```make run``` to play the created game.
